@@ -1,7 +1,7 @@
 from telegram import Bot, Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, ConversationHandler
 from random import randint
-from  calc import  calc, rac_calc, init_calc, end_calc
+from  calc import  calc, rac_calc, init_calc, end_calc, complex_calc
 bot = Bot(token='5529753378:AAEepfWDUzplIL_YKRrxlWJtKN4HdDK0E9Y')
 updater = Updater(token='5529753378:AAEepfWDUzplIL_YKRrxlWJtKN4HdDK0E9Y')
 dispatcher = updater.dispatcher
@@ -13,8 +13,7 @@ STEP_PL, STEP_BOT, END_GAME = range(3)
 
 def start(update, context):
     context.bot.send_message(update.effective_chat.id,
-                             f'Привет, сыграем в игру? Если да, напиши /start_game. Для выхода нажми /cansel')
-
+                             f'Привет, сыграем в игру? Если да, напиши /start_game.\n Для вызова калькулятора введите /init_calc \n Для выхода нажми /cansel')
 
 def start_game(update, context):
     global board
@@ -146,7 +145,9 @@ conv2_handler = ConversationHandler(
     entry_points=[CommandHandler('init_calc', init_calc)],
     states={
         CALC: [MessageHandler(Filters.text, calc)],
-        INPUT_RAC: [MessageHandler(Filters.text, rac_calc)]
+        INPUT_RAC: [MessageHandler(Filters.text, rac_calc)],
+        INPUT_COMPLEX: [MessageHandler(Filters.text, complex_calc)],
+        END_CALC: [MessageHandler(Filters.text, end_calc)]
     },
     fallbacks=[CommandHandler('cancel', cancel)],
 )
@@ -159,4 +160,4 @@ start_handler = CommandHandler('start', start)
 dispatcher.add_handler(start_handler)
 
 updater.start_polling()
-updater.idle()  # ctrl + c
+updater.idle()  
